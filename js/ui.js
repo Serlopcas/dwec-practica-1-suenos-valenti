@@ -1,3 +1,4 @@
+import { validatePrefs } from "./prefs.js";
 export function setView(container, html) {
     container.innerHTML = html;
 }
@@ -136,9 +137,9 @@ export function renderCarrito(container, { onBack, items = [], total = 0, onRemo
       <div id="carrito-info"></div>
       <div id="carrito-list"></div>
 
-      <div id="carrito-actions" style="margin-top: 12px;"></div>
+      <div id="carrito-actions"></div>
 
-      <div id="botonera" style="margin-top: 12px;"></div>
+      <div id="botonera"></div>
     </section>
   `
     );
@@ -189,17 +190,167 @@ export function renderCarrito(container, { onBack, items = [], total = 0, onRemo
 }
 
 
-export function renderPreferencias(container, { onBack }) {
+export function renderPreferencias(
+    container,
+    { onBack, prefs, onSubmitPrefs }
+) {
     setView(
         container,
         `
     <section class="main-section">
       <h2>Preferencias</h2>
-      <p>(Placeholder) Aquí pondremos un formulario simple con validación y guardado en <code>localStorage</code>.</p>
+
+      <form id="prefs-form" novalidate>
+        <div>
+          <label for="pref-name"><strong>Nombre espiritual</strong></label><br />
+          <input id="pref-name" name="name" type="text"/>
+          <div id="err-name" class="field-error"></div>
+        </div>
+
+        <div>
+          <label for="pref-budget"><strong>Presupuesto máximo (€)</strong></label><br />
+          <input id="pref-budget" name="maxBudget" type="number" inputmode="numeric" step="10" />
+          <div id="err-budget" class="field-error"></div>
+        </div>
+
+        <div>
+          <label><strong>Ordenar por</strong></label><br />
+          <select id="pref-sortkey" name="sortKey">
+            <option value="id">Id</option>
+            <option value="nombre">Título (alfabético)</option>
+            <option value="precio">Precio</option>
+          </select>
+
+          <select id="pref-sortdir" name="sortDir">
+            <option value="asc">Ascendente</option>
+            <option value="desc">Descendente</option>
+          </select>
+        </div>
+
+        <div>
+          <label>
+            <input id="pref-filter" name="filterUnderBudget" type="checkbox" />
+            Mostrar solo sesiones ≤ presupuesto máximo
+          </label>
+          <div id="err-filter" class="field-error"></div>
+        </div>
+
+        <button id="prefs-save" type="submit">Guardar preferencias</button>
+        <button id="prefs-reset" type="button">Restablecer</button>
+        <span id="prefs-status" class="status-text"></span>
+      </form>
+
       <div id="botonera"></div>
     </section>
   `
     );
+
+    const resetBtn = container.querySelector("#prefs-reset");
+    const form = container.querySelector("#prefs-form");
+    const nameInput = container.querySelector("#pref-name");
+    const budgetInput = container.querySelector("#pref-budget");
+    const sortKeySelect = container.querySelector("#pref-sortkey");
+    const sortDirSelect = container.querySelector("#pref-sortdir");
+    const filterCheckbox = container.querySelector("#pref-filter");
+    const saveBtn = container.querySelector("#prefs-save");
+    const status = container.querySelector("#prefs-status");
+
+    const errName = container.querySelector("#err-name");
+    const errBudget = container.querySelector("#err-budget");
+    const errFilter = container.querySelector("#err-filter");
+
+    nameInput.value = prefs.name ?? "";
+    sortKeySelect.value = prefs.sortKey ?? "id";
+    sortDirSelect.value = prefs.sortDir ?? "asc";
+    budgetInput.value = prefs.maxBudget ?? "";
+    filterCheckbox.checked = Boolean(prefs.filterUnderBudget);
+
+    if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+            form.reset();
+            errName.textContent = "";
+            errBudget.textContent = "";
+            errFilter.textContent = "";
+            status.textContent = "Restablecido a valores por defecto";
+            validateLive();
+        });
+    }
+
+    function parseBudget(value) {
+        const trimmed = String(value ?? "").trim();
+        if (trimmed === "") return null;
+        const n = Number(trimmed);
+        if (!Number.isFinite(n)) return NaN;
+        return n;
+    }
+
+    function isValidPositiveInt(n) {
+        return Number.isInteger(n) && n > 0;
+    }
+
+    function validateLive() {
+        errName.textContent = "";
+        errBudget.textContent = "";
+        errFilter.textContent = "";
+        status.textContent = "";
+
+        const name = nameInput.value.trim();
+        const budgetRaw = parseBudget(budgetInput.value);
+        const filterUnderBudget = filterCheckbox.checked;
+
+        const errors = validatePrefs({
+            name,
+            maxBudget: budgetRaw,
+            filterUnderBudget
+        });
+
+        if (errors.name) errName.textContent = errors.name;
+        if (errors.maxBudget) errBudget.textContent = errors.maxBudget;
+        if (errors.filterUnderBudget) errFilter.textContent = errors.filterUnderBudget;
+
+        const budgetOk = budgetRaw !== null && Number.isInteger(budgetRaw) && budgetRaw > 0;
+        filterCheckbox.disabled = !budgetOk;
+        if (!budgetOk) {
+            filterCheckbox.checked = false;
+        }
+
+        const hasErrors = Boolean(errName.textContent || errBudget.textContent || errFilter.textContent);
+        saveBtn.disabled = hasErrors;
+
+        return { name, maxBudget: budgetOk ? budgetRaw : null };
+    }
+
+    validateLive();
+
+    nameInput.addEventListener("input", validateLive);
+    budgetInput.addEventListener("input", validateLive);
+    sortKeySelect.addEventListener("change", () => {
+        status.textContent = "";
+    });
+    sortDirSelect.addEventListener("change", () => {
+        status.textContent = "";
+    });
+    filterCheckbox.addEventListener("change", validateLive);
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const { name, maxBudget } = validateLive();
+        const payload = {
+            name,
+            maxBudget,
+            sortKey: sortKeySelect.value,
+            sortDir: sortDirSelect.value,
+            filterUnderBudget: filterCheckbox.checked,
+        };
+
+        if (typeof onSubmitPrefs === "function") {
+            onSubmitPrefs(payload);
+        }
+        if (typeof onBack === "function") {
+            onBack();
+        }
+    });
 
     const botonera = container.querySelector("#botonera");
     if (botonera) createBackButton(botonera, onBack);

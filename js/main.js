@@ -17,6 +17,8 @@ import {
     getCartCount,
 } from "./cart.js";
 
+import { loadPrefs, savePrefs } from "./prefs.js";
+
 const app = document.querySelector("#app");
 
 let sesionesCache = null;
@@ -68,7 +70,7 @@ async function showSesiones() {
         if (section) {
             section.insertAdjacentHTML(
                 "beforeend",
-                `<p style="margin-top:12px;"><strong>Error:</strong> ${err.message}</p>`
+                `<p><strong>Error:</strong> ${err.message}</p>`
             );
         }
 
@@ -112,7 +114,7 @@ async function showCarrito() {
         if (section) {
             section.insertAdjacentHTML(
                 "beforeend",
-                `<p style="margin-top:12px;"><strong>Error:</strong> ${err.message}</p>`
+                `<p><strong>Error:</strong> ${err.message}</p>`
             );
         }
 
@@ -121,5 +123,15 @@ async function showCarrito() {
 }
 
 function showPreferencias() {
-    renderPreferencias(app, { onBack: showHome });
+    const prefs = loadPrefs();
+
+    renderPreferencias(app, {
+        onBack: showHome,
+        prefs,
+        onSubmitPrefs: (newPrefs) => {
+            savePrefs(newPrefs);
+            // Re-render para que si cambias algo, quede reflejado desde lo guardado
+            showPreferencias();
+        },
+    });
 }
