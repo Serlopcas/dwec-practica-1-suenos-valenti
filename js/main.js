@@ -47,14 +47,33 @@ async function showSesiones() {
 
     try {
         const sesiones = await ensureSesionesLoaded();
+        const prefs = loadPrefs();
+
+        const sesionesVista = applyPrefsToSesiones(sesiones, prefs);
 
         renderSesiones(app, {
             onBack: showHome,
-            sesiones,
+            sesiones: sesionesVista,
             cartCount: getCartCount(),
             getCartCount,
             onAddToCart: (id) => {
+                const sesion = sesiones.find((s) => s.id === id);
+                if (!sesion) return { ok: false, message: "Sesión no encontrada." };
+
+                if (Number.isInteger(prefs.maxBudget) && prefs.maxBudget > 0) {
+                    const currentTotal = calcCartTotalNow(sesiones);
+                    const newTotal = currentTotal + sesion.precio;
+
+                    if (newTotal > prefs.maxBudget) {
+                        return {
+                            ok: false,
+                            message: `No puedes añadirla: te pasarías del presupuesto (${newTotal}€ > ${prefs.maxBudget}€).`,
+                        };
+                    }
+                }
+
                 addToCart(id);
+                return { ok: true };
             },
         });
     } catch (err) {
@@ -63,7 +82,7 @@ async function showSesiones() {
             sesiones: [],
             cartCount: getCartCount(),
             getCartCount,
-            onAddToCart: () => { },
+            onAddToCart: () => ({ ok: false, message: "Error cargando sesiones." }),
         });
 
         const section = app.querySelector(".main-section");
@@ -73,9 +92,52 @@ async function showSesiones() {
                 `<p><strong>Error:</strong> ${err.message}</p>`
             );
         }
-
         console.error(err);
     }
+}
+
+// =====================
+// Helpers de preferencias
+// =====================
+
+function applyPrefsToSesiones(sesiones, prefs) {
+    let out = [...sesiones];
+
+    if (
+        prefs.filterUnderBudget &&
+        Number.isInteger(prefs.maxBudget) &&
+        prefs.maxBudget > 0
+    ) {
+        out = out.filter((s) => s.precio <= prefs.maxBudget);
+    }
+
+    const dir = prefs.sortDir === "desc" ? -1 : 1;
+
+    out.sort((a, b) => {
+        let va, vb;
+
+        switch (prefs.sortKey) {
+            case "nombre":
+                va = a.nombre.toLowerCase();
+                vb = b.nombre.toLowerCase();
+                return va.localeCompare(vb) * dir;
+
+            case "precio":
+                return (a.precio - b.precio) * dir;
+
+            case "id":
+            default:
+                return (a.id - b.id) * dir;
+        }
+    });
+
+    return out;
+}
+
+function calcCartTotalNow(sesiones) {
+    const ids = getCartIds();
+    const items = buildCartItemsFromIds(ids, sesiones);
+    return calcCartTotal(items);
 }
 
 async function showCarrito() {

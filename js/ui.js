@@ -82,6 +82,12 @@ export function renderSesiones(
     const feedback = container.querySelector("#sesiones-feedback");
     const countEl = container.querySelector("#sesiones-cart-count");
 
+    function setFeedback(text, type = "ok") {
+        if (!feedback) return;
+        feedback.textContent = text;
+        feedback.dataset.type = type;
+    }
+
     if (sesiones.length === 0) {
         list.innerHTML = `<p>No hay sesiones para mostrar.</p>`;
     } else {
@@ -107,19 +113,24 @@ export function renderSesiones(
 
         const id = Number(btn.dataset.id);
 
-        if (typeof onAddToCart === "function") onAddToCart(id);
-
-        if (feedback) {
-            feedback.textContent = `Añadida sesión con id ${id}`;
+        let result = { ok: true };
+        if (typeof onAddToCart === "function") {
+            result = onAddToCart(id) ?? { ok: true };
         }
 
-        if (countEl) {
-            if (typeof getCartCount === "function") {
-                countEl.textContent = String(getCartCount());
-            } else {
-                const current = Number(countEl.textContent) || 0;
-                countEl.textContent = String(current + 1);
+        if (result.ok) {
+            setFeedback(`Añadida sesión con id ${id}`, "ok");
+
+            if (countEl) {
+                if (typeof getCartCount === "function") {
+                    countEl.textContent = String(getCartCount());
+                } else {
+                    const current = Number(countEl.textContent) || 0;
+                    countEl.textContent = String(current + 1);
+                }
             }
+        } else {
+            setFeedback(result.message || `No se ha podido añadir la sesión ${id}`, "error");
         }
     });
 
