@@ -347,8 +347,8 @@ export function renderPreferencias(
         if (typeof onSubmitPrefs === "function") {
             onSubmitPrefs(payload);
         }
-        if (typeof onBack === "function") {
-            onBack();
+        if (typeof onSubmitPrefs === "function") {
+            onSubmitPrefs(payload);
         }
     });
 

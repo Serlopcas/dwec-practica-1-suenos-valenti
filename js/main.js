@@ -130,8 +130,7 @@ function showPreferencias() {
         prefs,
         onSubmitPrefs: (newPrefs) => {
             savePrefs(newPrefs);
-            // Re-render para que si cambias algo, quede reflejado desde lo guardado
-            showPreferencias();
+            showHome();
         },
     });
 }
