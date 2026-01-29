@@ -1,0 +1,98 @@
+[
+    {
+        "id": 1,
+        "nombre": "Terapia de regresión a vidas pasadas",
+        "descripcion": "Descubre tus vidas anteriores y sana traumas del pasado kármico.",
+        "precio": 50
+    },
+    {
+        "id": 2,
+        "nombre": "Sanación cuántica vibracional",
+        "descripcion": "Reprograma tus células con frecuencias cuánticas para el bienestar total.",
+        "precio": 60
+    },
+    {
+        "id": 3,
+        "nombre": "Reiki para mascotas",
+        "descripcion": "Transmite energía universal a tus animales para su equilibrio emocional.",
+        "precio": 25
+    },
+    {
+        "id": 4,
+        "nombre": "Homeopatía para el alma",
+        "descripcion": "Remedios vibracionales para sanar tu ser interior.",
+        "precio": 40
+    },
+    {
+        "id": 5,
+        "nombre": "Meditación guiada con unicornios etéricos",
+        "descripcion": "Conecta con seres mágicos para alcanzar la paz interior.",
+        "precio": 45
+    },
+    {
+        "id": 6,
+        "nombre": "Flores de Bach para la abundancia",
+        "descripcion": "Atrae prosperidad usando esencias florales energéticas.",
+        "precio": 30
+    },
+    {
+        "id": 7,
+        "nombre": "Constelaciones familiares galácticas",
+        "descripcion": "Resuelve conflictos ancestrales con ayuda de energías cósmicas.",
+        "precio": 55
+    },
+    {
+        "id": 8,
+        "nombre": "Masaje holístico con aceites de luna llena",
+        "descripcion": "Relájate con aceites energizados bajo la luz lunar.",
+        "precio": 38
+    },
+    {
+        "id": 9,
+        "nombre": "Lectura de aura digital",
+        "descripcion": "Descubre los colores de tu aura con tecnología de última generación.",
+        "precio": 28
+    },
+    {
+        "id": 10,
+        "nombre": "Activación del ADN cósmico",
+        "descripcion": "Despierta tu potencial oculto con frecuencias estelares.",
+        "precio": 70
+    },
+    {
+        "id": 11,
+        "nombre": "Tarot terapéutico para empresas",
+        "descripcion": "Mejora el ambiente laboral con cartas y arquetipos.",
+        "precio": 80
+    },
+    {
+        "id": 12,
+        "nombre": "Baño de gong para desbloqueo financiero",
+        "descripcion": "Elimina bloqueos económicos con vibraciones sonoras.",
+        "precio": 42
+    },
+    {
+        "id": 13,
+        "nombre": "Canalización de mensajes de delfines",
+        "descripcion": "Recibe sabiduría oceánica para tu vida diaria.",
+        "precio": 65
+    },
+    {
+        "id": 14,
+        "nombre": "Detox espiritual con agua diamantina",
+        "descripcion": "Purifica tu energía con agua energizada y rituales.",
+        "precio": 33
+    },
+    {
+        "id": 15,
+        "nombre": "Taller de mandalas cuánticos",
+        "descripcion": "Crea mandalas para armonizar tu campo cuántico personal.",
+        "precio": 27
+    },
+    {
+        "id": 16,
+        "nombre": "Imposición de manos a distancia vía Zoom",
+        "descripcion": "Recibe sanación energética sin salir de casa, estés donde estés.",
+        "precio": 36
+    }
+]
