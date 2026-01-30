@@ -116,10 +116,6 @@ button.btn-add:focus {
     cursor: pointer;
 }
 
-.sesion-card button:hover {
-    cursor: pointer;
-}
-
 /*
  * Formularios y campos de entrada
  * ------------------------------
