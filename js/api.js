@@ -2,7 +2,7 @@ export async function getSesiones() {
   const res = await fetch("./data/sesiones.json");
 
   if (!res.ok) {
-    throw new Error(`Error al cargar sesiones: ${res.status} ${res.statusText}`);
+    throw new Error(`No se han podido cargar las sesiones (${res.status} ${res.statusText}). Inténtalo de nuevo más tarde.`);
   }
 
   const data = await res.json();

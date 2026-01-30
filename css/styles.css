@@ -1,0 +1,88 @@
+body {
+  background: #f5f3fa;
+  min-height: 100vh;
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-section {
+  background: #fffefc;
+  margin: 2rem 0;
+  padding: 2rem 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px #0001;
+  max-width: 420px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button {
+  background: #7e57c2;
+  color: #fffbe8;
+  border: none;
+  border-radius: 0.7em;
+  padding: 0.6em 1.3em;
+  margin: 0.3em 0.5em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+button.btn-add {
+  font-weight: 600;
+  box-shadow: 0 2px 8px #bfaee033;
+}
+button:hover, button:focus, button.btn-add:hover, button.btn-add:focus {
+  background: #5e35b1;
+  color: #fffbe8;
+}
+
+.sesion-card {
+  background: #f3f0fa;
+  border: 1.5px solid #bfaee0;
+  border-radius: 1em;
+  box-shadow: 0 2px 8px #bfaee033;
+  margin: 1em 0;
+  padding: 1em;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.sesion-card.highlighted {
+  background: #e6d8f7;
+  box-shadow: 0 4px 24px #bfaee0aa;
+  border-color: #a48ad4;
+}
+
+form {
+  background: #f7f5fa;
+  border-radius: 1em;
+  padding: 1em;
+  box-shadow: 0 1px 8px #b6c6e022;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  width: 100%;
+  max-width: 350px;
+}
+input, select {
+  border: 1px solid #bfaee0;
+  border-radius: 0.5em;
+  padding: 0.5em 0.7em;
+  font-size: 1em;
+  background: #fffefc;
+  box-sizing: border-box;
+}
+.input-help {
+  color: #7e57c2;
+  font-size: 0.93em;
+}
+.field-error {
+  color: #b02a2a;
+  font-size: 0.97em;
+  font-weight: 500;
+}

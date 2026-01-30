@@ -42,19 +42,19 @@ export function validatePrefs({ name, maxBudget, filterUnderBudget }) {
     const cleanName = String(name ?? "").trim();
     if (cleanName === "") {
     } else {
-        if (cleanName.length < 3) errors.name = "Mínimo 3 caracteres.";
-        if (cleanName.length > 16) errors.name = "Máximo 16 caracteres.";
+        if (cleanName.length < 3) errors.name = "El nombre debe tener al menos 3 caracteres.";
+        if (cleanName.length > 16) errors.name = "El nombre no puede superar los 16 caracteres.";
     }
 
     if (maxBudget !== null) {
         if (!Number.isInteger(maxBudget) || maxBudget <= 0) {
-            errors.maxBudget = "Debe ser un entero positivo.";
+            errors.maxBudget = "El presupuesto debe ser un número entero positivo.";
         }
     }
 
     if (filterUnderBudget) {
         if (maxBudget === null || !Number.isInteger(maxBudget) || maxBudget <= 0) {
-            errors.filterUnderBudget = "Necesitas un presupuesto válido para activar el filtro.";
+            errors.filterUnderBudget = "Debes indicar un presupuesto válido para activar este filtro.";
         }
     }
 

@@ -30,21 +30,21 @@ export function renderHome(
     setView(
         container,
         `
-    <section class="main-section">
-      <h1>Sueños Valenti – Sesiones Interactivas</h1>
-      <p>Explora sesiones grupales y gestiona tu carrito espiritual desde el navegador.</p>
+        <section class="main-section">
+            <h1>Sueños Valenti – Sesiones Interactivas</h1>
+            <p>Explora las sesiones grupales y gestiona tu carrito espiritual cómodamente desde el navegador.</p>
 
-      <div>
-        <button id="btn-sesiones" type="button">Ver sesiones</button>
+            <div>
+                <button id="btn-sesiones" type="button">Ver sesiones</button>
 
-        <button id="btn-carrito" type="button">
-          Carrito ${badgeHtml}
-        </button>
+                <button id="btn-carrito" type="button">
+                    Carrito ${badgeHtml}
+                </button>
 
-        <button id="btn-preferencias" type="button">Preferencias</button>
-      </div>
-    </section>
-  `
+                <button id="btn-preferencias" type="button">Mis preferencias</button>
+            </div>
+        </section>
+        `
     );
 
     container.querySelector("#btn-sesiones")?.addEventListener("click", onSesiones);
@@ -61,24 +61,24 @@ export function renderSesiones(
     setView(
         container,
         `
-    <section class="main-section">
-      <h2>Sesiones</h2>
+        <section class="main-section">
+            <h2>Sesiones disponibles</h2>
 
-      <p>
-        <strong>Carrito:</strong>
-        <span id="sesiones-cart-count">${cartCount}</span>
-      </p>
+            <p>
+                <strong>Carrito:</strong>
+                <span id="sesiones-cart-count">${cartCount}</span>
+            </p>
 
-      <label for="sesiones-search"><strong>Buscar</strong></label><br />
-      <input id="sesiones-search" type="text" placeholder="Escribe para filtrar..." />
+            <label for="sesiones-search"><strong>Buscar</strong></label><br />
+            <input id="sesiones-search" type="text" placeholder="Buscar por título o descripción de la sesión" aria-label="Buscar sesiones" />
 
-      <p id="sesiones-feedback" class="feedback" aria-live="polite"></p>
+            <p id="sesiones-feedback" class="feedback" aria-live="polite"></p>
 
-      <div id="sesiones-list" class="sesiones-list"></div>
+            <div id="sesiones-list" class="sesiones-list"></div>
 
-      <div id="botonera"></div>
-    </section>
-  `
+            <div id="botonera"></div>
+        </section>
+        `
     );
 
     const searchInput = container.querySelector("#sesiones-search");
@@ -96,24 +96,25 @@ export function renderSesiones(
         if (!list) return;
 
         if (data.length === 0) {
-            list.innerHTML = `<p>No hay sesiones que coincidan.</p>`;
+            list.innerHTML = `<p>No hay sesiones que coincidan con tu búsqueda.</p>`;
             return;
         }
 
         list.innerHTML = data
             .map(
-                (s) => `
-        <article class="sesion-card" data-id="${s.id}">
-          <h3>${s.nombre}</h3>
-          <p class="sesion-desc" hidden>
-            ${s.descripcion ? s.descripcion : ""}
-          </p>
-          <p><strong>Precio:</strong> ${s.precio} €</p>
-          <button type="button" data-id="${s.id}" class="btn-add">
-            Añadir al carrito
-          </button>
-        </article>
-      `
+                (s) =>
+                    `
+                    <article class="sesion-card" data-id="${s.id}">
+                    <h3>${s.nombre}</h3>
+                    <p class="sesion-desc" hidden>
+                        ${s.descripcion ? s.descripcion : ""}
+                    </p>
+                    <p><strong>Precio:</strong> ${s.precio} €</p>
+                    <button type="button" data-id="${s.id}" class="btn-add">
+                        Añadir al carrito
+                    </button>
+                    </article>
+                    `
             )
             .join("");
     }
@@ -148,7 +149,7 @@ export function renderSesiones(
             }
 
             if (result.ok) {
-                setFeedback(`Añadida sesión con id ${id}`, "ok");
+                setFeedback(`Sesión añadida al carrito correctamente.`, "ok");
 
                 if (countEl) {
                     if (typeof getCartCount === "function") {
@@ -160,7 +161,7 @@ export function renderSesiones(
                 }
             } else {
                 setFeedback(
-                    result.message || `No se ha podido añadir la sesión ${id}`,
+                    result.message || `No se ha podido añadir la sesión al carrito.`,
                     "error"
                 );
             }
@@ -188,17 +189,17 @@ export function renderCarrito(container, { onBack, items = [], total = 0, onRemo
     setView(
         container,
         `
-    <section class="main-section">
-      <h2>Carrito</h2>
+        <section class="main-section">
+        <h2>Mi carrito</h2>
 
-      <div id="carrito-info"></div>
-      <div id="carrito-list"></div>
+        <div id="carrito-info"></div>
+        <div id="carrito-list"></div>
 
-      <div id="carrito-actions"></div>
+        <div id="carrito-actions"></div>
 
-      <div id="botonera"></div>
-    </section>
-  `
+        <div id="botonera"></div>
+        </section>
+        `
     );
 
     const info = container.querySelector("#carrito-info");
@@ -214,18 +215,18 @@ export function renderCarrito(container, { onBack, items = [], total = 0, onRemo
         list.innerHTML = items
             .map(
                 (it) => `
-        <article class="sesion-card">
-          <h3>${it.nombre}</h3>
-          <p>
-            <strong>Precio:</strong> ${it.precio} € ·
-            <strong>Cantidad:</strong> ${it.qty} ·
-            <strong>Subtotal:</strong> ${it.subtotal} €
-          </p>
-          <button type="button" class="btn-remove" data-id="${it.id}">
-            Eliminar 1
-          </button>
-        </article>
-      `
+                        <article class="sesion-card">
+                        <h3>${it.nombre}</h3>
+                        <p>
+                            <strong>Precio:</strong> ${it.precio} € ·
+                            <strong>Cantidad:</strong> ${it.qty} ·
+                            <strong>Subtotal:</strong> ${it.subtotal} €
+                        </p>
+                        <button type="button" class="btn-remove" data-id="${it.id}">
+                            Eliminar 1
+                        </button>
+                        </article>
+                        `
             )
             .join("");
 
@@ -254,53 +255,59 @@ export function renderPreferencias(
     setView(
         container,
         `
-    <section class="main-section">
-      <h2>Preferencias</h2>
+        <section class="main-section">
+            <h2>Mis preferencias</h2>
 
-      <form id="prefs-form" novalidate>
-        <div>
-          <label for="pref-name"><strong>Nombre espiritual</strong></label><br />
-          <input id="pref-name" name="name" type="text"/>
-          <div id="err-name" class="field-error"></div>
-        </div>
+            <form id="prefs-form" novalidate>
+                <div>
+                    <label for="pref-name"><strong>Nombre espiritual</strong></label><br />
+                    <input id="pref-name" name="name" type="text" placeholder="Introduce tu nombre espiritual (3-16 caracteres)" aria-label="Nombre espiritual" />
+                    <div id="err-name" class="field-error"></div>
+                </div>
 
-        <div>
-          <label for="pref-budget"><strong>Presupuesto máximo (€)</strong></label><br />
-          <input id="pref-budget" name="maxBudget" type="number" inputmode="numeric" step="10" />
-          <div id="err-budget" class="field-error"></div>
-        </div>
+                <div>
+                    <label for="pref-budget"><strong>Presupuesto máximo (€)</strong></label><br />
+                    <input id="pref-budget" name="maxBudget" type="number" inputmode="numeric" step="10" placeholder="Ejemplo: 100" aria-label="Presupuesto máximo" />
+                    <small class="input-help">Solo se podrán añadir sesiones si no superas este importe.</small>
+                    <div id="err-budget" class="field-error"></div>
+                </div>
 
-        <div>
-          <label><strong>Ordenar por</strong></label><br />
-          <select id="pref-sortkey" name="sortKey">
-            <option value="id">Id</option>
-            <option value="nombre">Título (alfabético)</option>
-            <option value="precio">Precio</option>
-          </select>
+                <div>
+                    <label><strong>Ordenar por</strong></label><br />
 
-          <select id="pref-sortdir" name="sortDir">
-            <option value="asc">Ascendente</option>
-            <option value="desc">Descendente</option>
-          </select>
-        </div>
+                    <select id="pref-sortkey" name="sortKey">
+                        <option value="id">Id</option>
+                        <option value="nombre">Título (alfabético)</option>
+                        <option value="precio">Precio</option>
+                    </select>
 
-        <div>
-          <label>
-            <input id="pref-filter" name="filterUnderBudget" type="checkbox" />
-            Mostrar solo sesiones ≤ presupuesto máximo
-          </label>
-          <div id="err-filter" class="field-error"></div>
-        </div>
+                    <select id="pref-sortdir" name="sortDir">
+                        <option value="asc">Ascendente</option>
+                        <option value="desc">Descendente</option>
+                    </select>
+                </div>
 
-        <button id="prefs-save" type="submit">Guardar preferencias</button>
-        <button id="prefs-clear" type="button">Limpiar</button>
-        <button id="prefs-restore" type="button">Restablecer</button>
-        <span id="prefs-status" class="status-text"></span>
-      </form>
+                <div>
+                    <label>
+                        <input id="pref-filter" name="filterUnderBudget" type="checkbox" />
+                        Mostrar solo sesiones ≤ presupuesto máximo
+                    </label>
 
-      <div id="botonera"></div>
-    </section>
-  `
+                    <div id="err-filter" class="field-error"></div>
+                </div>
+
+                <button id="prefs-save" type="submit">Guardar preferencias</button>
+                
+                <button id="prefs-clear" type="button">Limpiar</button>
+                
+                <button id="prefs-restore" type="button">Restablecer</button>
+                
+                <span id="prefs-status" class="status-text"></span>
+            </form>
+
+            <div id="botonera"></div>
+        </section>
+        `
     );
 
     const form = container.querySelector("#prefs-form");

@@ -59,7 +59,7 @@ async function ensureSesionesLoaded() {
 }
 
 async function showSesiones() {
-    app.innerHTML = `<section class="main-section"><p>Cargando sesiones...</p></section>`;
+    app.innerHTML = `<section class="main-section"><p>Cargando sesiones…</p></section>`;
 
     try {
         const sesiones = await ensureSesionesLoaded();
@@ -83,7 +83,7 @@ async function showSesiones() {
                     if (newTotal > prefs.maxBudget) {
                         return {
                             ok: false,
-                            message: `No puedes añadirla: te pasarías del presupuesto (${newTotal}€ > ${prefs.maxBudget}€).`,
+                            message: `No puedes añadir la sesión porque superarías tu presupuesto (${newTotal} € > ${prefs.maxBudget} €).`,
                         };
                     }
                 }
@@ -98,14 +98,14 @@ async function showSesiones() {
             sesiones: [],
             cartCount: getCartCount(),
             getCartCount,
-            onAddToCart: () => ({ ok: false, message: "Error cargando sesiones." }),
+            onAddToCart: () => ({ ok: false, message: "No se han podido cargar las sesiones. Inténtalo de nuevo más tarde." }),
         });
 
         const section = app.querySelector(".main-section");
         if (section) {
             section.insertAdjacentHTML(
                 "beforeend",
-                `<p><strong>Error:</strong> ${err.message}</p>`
+                `<p class="feedback error"><strong>Error:</strong> ${err.message}</p>`
             );
         }
         console.error(err);
@@ -157,7 +157,7 @@ function calcCartTotalNow(sesiones) {
 }
 
 async function showCarrito() {
-    app.innerHTML = `<section class="main-section"><p>Cargando carrito...</p></section>`;
+    app.innerHTML = `<section class="main-section"><p>Cargando carrito…</p></section>`;
 
     try {
         const sesiones = await ensureSesionesLoaded();
@@ -192,7 +192,7 @@ async function showCarrito() {
         if (section) {
             section.insertAdjacentHTML(
                 "beforeend",
-                `<p><strong>Error:</strong> ${err.message}</p>`
+                `<p class="feedback error"><strong>Error:</strong> ${err.message}</p>`
             );
         }
 
