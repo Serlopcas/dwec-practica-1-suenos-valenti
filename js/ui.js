@@ -105,7 +105,9 @@ export function renderSesiones(
                 (s) => `
         <article class="sesion-card" data-id="${s.id}">
           <h3>${s.nombre}</h3>
-          <p class="sesion-desc">${s.descripcion ? s.descripcion : ""}</p>
+          <p class="sesion-desc" hidden>
+            ${s.descripcion ? s.descripcion : ""}
+          </p>
           <p><strong>Precio:</strong> ${s.precio} €</p>
           <button type="button" data-id="${s.id}" class="btn-add">
             Añadir al carrito
@@ -137,28 +139,43 @@ export function renderSesiones(
 
     list.addEventListener("click", (e) => {
         const btn = e.target.closest(".btn-add");
-        if (!btn) return;
+        if (btn) {
+            const id = Number(btn.dataset.id);
 
-        const id = Number(btn.dataset.id);
+            let result = { ok: true };
+            if (typeof onAddToCart === "function") {
+                result = onAddToCart(id) ?? { ok: true };
+            }
 
-        let result = { ok: true };
-        if (typeof onAddToCart === "function") {
-            result = onAddToCart(id) ?? { ok: true };
+            if (result.ok) {
+                setFeedback(`Añadida sesión con id ${id}`, "ok");
+
+                if (countEl) {
+                    if (typeof getCartCount === "function") {
+                        countEl.textContent = String(getCartCount());
+                    } else {
+                        const current = Number(countEl.textContent) || 0;
+                        countEl.textContent = String(current + 1);
+                    }
+                }
+            } else {
+                setFeedback(
+                    result.message || `No se ha podido añadir la sesión ${id}`,
+                    "error"
+                );
+            }
+
+            return;
         }
 
-        if (result.ok) {
-            setFeedback(`Añadida sesión con id ${id}`, "ok");
+        const card = e.target.closest(".sesion-card");
+        if (!card) return;
 
-            if (countEl) {
-                if (typeof getCartCount === "function") {
-                    countEl.textContent = String(getCartCount());
-                } else {
-                    const current = Number(countEl.textContent) || 0;
-                    countEl.textContent = String(current + 1);
-                }
-            }
-        } else {
-            setFeedback(result.message || `No se ha podido añadir la sesión ${id}`, "error");
+        card.classList.toggle("highlighted");
+
+        const desc = card.querySelector(".sesion-desc");
+        if (desc) {
+            desc.hidden = !card.classList.contains("highlighted");
         }
     });
 
