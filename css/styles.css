@@ -14,7 +14,7 @@ body {
     margin: 2rem 0;
     padding: 0.5rem 2.5rem;
     border-radius: 1rem;
-    box-shadow: 0 2px 8px #0001;
+    box-shadow: 0 4px 24px #bfaee055;
     max-width: 440px;
     width: 100%;
     box-sizing: border-box;
@@ -51,7 +51,7 @@ button {
 
 button.btn-add {
     font-weight: 600;
-    box-shadow: 0 2px 8px #bfaee033;
+    box-shadow: 0 4px 16px #7e57c244;
 }
 
 button:hover,
@@ -66,7 +66,7 @@ button.btn-add:focus {
     background: #f3f0fa;
     border: 1.5px solid #bfaee0;
     border-radius: 1em;
-    box-shadow: 0 2px 8px #bfaee033;
+    box-shadow: 0 4px 24px #bfaee088;
     margin: 1em 0;
     padding: 1em;
     transition: background 0.2s, box-shadow 0.2s;
@@ -74,7 +74,7 @@ button.btn-add:focus {
 
 .sesion-card.highlighted {
     background: #e6d8f7;
-    box-shadow: 0 4px 24px #bfaee0aa;
+    box-shadow: 0 8px 32px #a48ad4cc;
     border-color: #a48ad4;
 }
 
@@ -82,7 +82,7 @@ form {
     background: #f7f5fa;
     border-radius: 1em;
     padding: 1em;
-    box-shadow: 0 1px 8px #b6c6e022;
+    box-shadow: 0 2px 16px #bfaee055;
     display: flex;
     flex-direction: column;
     gap: 0.7em;
