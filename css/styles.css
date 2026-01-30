@@ -110,3 +110,28 @@ select {
     font-size: 0.97em;
     font-weight: 500;
 }
+
+body.has-sticky-footer {
+    padding-bottom: 72px;
+}
+
+.sticky-footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    padding: 12px 0;
+    background: #f5f3fa;
+    box-shadow: 0 -2px 8px #0001;
+}
+
+.sticky-footer__inner {
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    justify-content: center;
+}

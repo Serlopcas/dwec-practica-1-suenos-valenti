@@ -18,10 +18,25 @@ export function createBackButton(container, onBack) {
     container.appendChild(btn);
 }
 
+function mountStickyFooter(container, onBack) {
+    const footer = document.createElement("footer");
+    footer.className = "sticky-footer";
+
+    const inner = document.createElement("div");
+    inner.className = "sticky-footer__inner";
+
+    inner.appendChild(createButton("Volver", onBack));
+    footer.appendChild(inner);
+
+    container.appendChild(footer);
+}
+
 export function renderHome(
     container,
     { onSesiones, onCarrito, onPreferencias, cartCount = 0 }
 ) {
+    document.body.classList.remove("has-sticky-footer");
+
     const badgeHtml =
         cartCount > 0
             ? `<span class="badge" aria-label="Elementos en carrito">${cartCount}</span>`
@@ -64,6 +79,8 @@ export function renderSesiones(
     container,
     { onBack, sesiones = [], onAddToCart, cartCount = 0, getCartCount }
 ) {
+    document.body.classList.add("has-sticky-footer");
+    
     setView(
         container,
         `
@@ -81,8 +98,6 @@ export function renderSesiones(
             <p id="sesiones-feedback" class="feedback" aria-live="polite"></p>
 
             <div id="sesiones-list" class="sesiones-list"></div>
-
-            <div id="botonera"></div>
         </section>
         `
     );
@@ -186,12 +201,13 @@ export function renderSesiones(
         }
     });
 
-    const botonera = container.querySelector("#botonera");
-    if (botonera) createBackButton(botonera, onBack);
+    mountStickyFooter(container, onBack);
 }
 
 
 export function renderCarrito(container, { onBack, items = [], total = 0, onRemoveOne, onClear }) {
+    document.body.classList.add("has-sticky-footer");
+    
     setView(
         container,
         `
@@ -202,8 +218,6 @@ export function renderCarrito(container, { onBack, items = [], total = 0, onRemo
         <div id="carrito-list"></div>
 
         <div id="carrito-actions"></div>
-
-        <div id="botonera"></div>
         </section>
         `
     );
@@ -249,8 +263,7 @@ export function renderCarrito(container, { onBack, items = [], total = 0, onRemo
         actions.appendChild(clearBtn);
     }
 
-    const botonera = container.querySelector("#botonera");
-    if (botonera) createBackButton(botonera, onBack);
+    mountStickyFooter(container, onBack);
 }
 
 
@@ -258,6 +271,8 @@ export function renderPreferencias(
     container,
     { onBack, prefs, onSubmitPrefs, onRestorePrefs }
 ) {
+    document.body.classList.add("has-sticky-footer");
+
     setView(
         container,
         `
@@ -311,8 +326,6 @@ export function renderPreferencias(
                 
                 <span id="prefs-status" class="status-text"></span>
             </form>
-
-            <div id="botonera"></div>
         </section>
         `
     );
@@ -428,6 +441,5 @@ export function renderPreferencias(
         }
     });
 
-    const botonera = container.querySelector("#botonera");
-    if (botonera) createBackButton(botonera, onBack);
+    mountStickyFooter(container, onBack);
 }
