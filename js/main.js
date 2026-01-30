@@ -20,12 +20,15 @@ import {
 import { loadPrefs, savePrefs } from "./prefs.js";
 
 const app = document.querySelector("#app");
-
 const userBadge = document.querySelector("#user-badge");
+const btnScrollUp = document.querySelector("#scroll-up");
+const btnScrollDown = document.querySelector("#scroll-down");
 
 let sesionesCache = null;
 
 document.addEventListener("DOMContentLoaded", () => {
+    updateUserBadge();
+    bindScrollControls();
     showHome();
 });
 
@@ -109,6 +112,21 @@ async function showSesiones() {
             );
         }
         console.error(err);
+    }
+}
+
+function bindScrollControls() {
+    if (btnScrollUp) {
+        btnScrollUp.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
+
+    if (btnScrollDown) {
+        btnScrollDown.addEventListener("click", () => {
+            const max = document.documentElement.scrollHeight;
+            window.scrollTo({ top: max, behavior: "smooth" });
+        });
     }
 }
 

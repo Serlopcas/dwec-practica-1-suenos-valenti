@@ -39,7 +39,7 @@ export function renderHome(
 
     const badgeHtml =
         cartCount > 0
-            ? `<span class="badge" aria-label="Elementos en carrito">${cartCount}</span>`
+            ? `<span class="badge">${cartCount}</span>`
             : "";
 
     setView(
@@ -93,7 +93,7 @@ export function renderSesiones(
             </p>
 
             <label for="sesiones-search"><strong>Buscar por título o descripción de la sesión</strong></label><br />
-            <input id="sesiones-search" type="text" placeholder="Introduce texto para buscar" aria-label="Buscar sesiones" />
+            <input id="sesiones-search" type="text" placeholder="Introduce texto para buscar"/>
 
             <p id="sesiones-feedback" class="feedback" aria-live="polite"></p>
 
@@ -282,13 +282,13 @@ export function renderPreferencias(
             <form id="prefs-form" novalidate>
                 <div>
                     <label for="pref-name"><strong>Nombre espiritual</strong></label><br />
-                    <input id="pref-name" name="name" type="text" placeholder="Introduce tu nombre espiritual (3-16 caracteres)" aria-label="Nombre espiritual" />
+                    <input id="pref-name" name="name" type="text" placeholder="Introduce tu nombre espiritual (3-16 caracteres)"/>
                     <div id="err-name" class="field-error"></div>
                 </div>
 
                 <div>
                     <label for="pref-budget"><strong>Presupuesto máximo (€)</strong></label><br />
-                    <input id="pref-budget" name="maxBudget" type="number" inputmode="numeric" step="10" placeholder="Ejemplo: 100" aria-label="Presupuesto máximo" />
+                    <input id="pref-budget" name="maxBudget" type="number" inputmode="numeric" step="10" placeholder="Ejemplo: 100"/>
                     </br>
                     <small class="input-help">Solo se podrán añadir sesiones si no superas este importe.</small>
                     <div id="err-budget" class="field-error"></div>
