@@ -35,7 +35,7 @@ export function renderHome(
     container,
     { onSesiones, onCarrito, onPreferencias, cartCount = 0 }
 ) {
-    document.body.classList.remove("has-sticky-footer");
+    container.classList.remove("has-sticky-footer");
 
     const badgeHtml =
         cartCount > 0
@@ -79,7 +79,7 @@ export function renderSesiones(
     container,
     { onBack, sesiones = [], onAddToCart, cartCount = 0, getCartCount }
 ) {
-    document.body.classList.add("has-sticky-footer");
+    container.classList.add("has-sticky-footer");
     
     setView(
         container,
@@ -206,7 +206,7 @@ export function renderSesiones(
 
 
 export function renderCarrito(container, { onBack, items = [], total = 0, onRemoveOne, onClear }) {
-    document.body.classList.add("has-sticky-footer");
+    container.classList.add("has-sticky-footer");
     
     setView(
         container,
@@ -271,7 +271,7 @@ export function renderPreferencias(
     container,
     { onBack, prefs, onSubmitPrefs, onRestorePrefs }
 ) {
-    document.body.classList.add("has-sticky-footer");
+    container.classList.add("has-sticky-footer");
 
     setView(
         container,

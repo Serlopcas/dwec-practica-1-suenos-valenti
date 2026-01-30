@@ -111,7 +111,7 @@ select {
     font-weight: 500;
 }
 
-body.has-sticky-footer {
+#app.has-sticky-footer {
     padding-bottom: 72px;
 }
 
