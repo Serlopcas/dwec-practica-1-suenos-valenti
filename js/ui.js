@@ -31,10 +31,16 @@ export function renderHome(
         container,
         `
         <section class="main-section">
-            <h1>Sueños Valenti – Sesiones Interactivas</h1>
-            <p>Explora las sesiones grupales y gestiona tu carrito espiritual cómodamente desde el navegador.</p>
-
-            <div>
+            <p>
+                Bienvenido/a a <strong>Sueños Valenti</strong>, el único portal donde tu <em>yo cuántico</em> hace check-in
+                antes que tú. Aquí no vendemos humo: lo <strong>materializamos</strong>, lo bendecimos con
+                <em>frecuencias</em> y lo guardamos en tu carrito espiritual.
+            </p>
+            <p>
+                Elige una sesión, eleva tu vibración (o al menos tu presupuesto), y recuerda:
+                si no te funciona… es que no estabas alineado con Mercurio retrógrado.
+            </p>
+            <div id="home-btns">
                 <button id="btn-sesiones" type="button">Ver sesiones</button>
 
                 <button id="btn-carrito" type="button">
@@ -69,8 +75,8 @@ export function renderSesiones(
                 <span id="sesiones-cart-count">${cartCount}</span>
             </p>
 
-            <label for="sesiones-search"><strong>Buscar</strong></label><br />
-            <input id="sesiones-search" type="text" placeholder="Buscar por título o descripción de la sesión" aria-label="Buscar sesiones" />
+            <label for="sesiones-search"><strong>Buscar por título o descripción de la sesión</strong></label><br />
+            <input id="sesiones-search" type="text" placeholder="Introduce texto para buscar" aria-label="Buscar sesiones" />
 
             <p id="sesiones-feedback" class="feedback" aria-live="polite"></p>
 
@@ -268,6 +274,7 @@ export function renderPreferencias(
                 <div>
                     <label for="pref-budget"><strong>Presupuesto máximo (€)</strong></label><br />
                     <input id="pref-budget" name="maxBudget" type="number" inputmode="numeric" step="10" placeholder="Ejemplo: 100" aria-label="Presupuesto máximo" />
+                    </br>
                     <small class="input-help">Solo se podrán añadir sesiones si no superas este importe.</small>
                     <div id="err-budget" class="field-error"></div>
                 </div>
