@@ -69,6 +69,9 @@ export function renderSesiones(
         <span id="sesiones-cart-count">${cartCount}</span>
       </p>
 
+      <label for="sesiones-search"><strong>Buscar</strong></label><br />
+      <input id="sesiones-search" type="text" placeholder="Escribe para filtrar..." />
+
       <p id="sesiones-feedback" class="feedback" aria-live="polite"></p>
 
       <div id="sesiones-list" class="sesiones-list"></div>
@@ -78,6 +81,7 @@ export function renderSesiones(
   `
     );
 
+    const searchInput = container.querySelector("#sesiones-search");
     const list = container.querySelector("#sesiones-list");
     const feedback = container.querySelector("#sesiones-feedback");
     const countEl = container.querySelector("#sesiones-cart-count");
@@ -88,15 +92,20 @@ export function renderSesiones(
         feedback.dataset.type = type;
     }
 
-    if (sesiones.length === 0) {
-        list.innerHTML = `<p>No hay sesiones para mostrar.</p>`;
-    } else {
-        list.innerHTML = sesiones
+    function renderList(data) {
+        if (!list) return;
+
+        if (data.length === 0) {
+            list.innerHTML = `<p>No hay sesiones que coincidan.</p>`;
+            return;
+        }
+
+        list.innerHTML = data
             .map(
                 (s) => `
-        <article class="sesion-card">
+        <article class="sesion-card" data-id="${s.id}">
           <h3>${s.nombre}</h3>
-          <p>${s.descripcion ? s.descripcion : ""}</p>
+          <p class="sesion-desc">${s.descripcion ? s.descripcion : ""}</p>
           <p><strong>Precio:</strong> ${s.precio} €</p>
           <button type="button" data-id="${s.id}" class="btn-add">
             Añadir al carrito
@@ -105,6 +114,25 @@ export function renderSesiones(
       `
             )
             .join("");
+    }
+
+    renderList(sesiones);
+
+    if (searchInput) {
+        searchInput.addEventListener("input", () => {
+            const q = searchInput.value.trim().toLowerCase();
+
+            const filtered =
+                q === ""
+                    ? sesiones
+                    : sesiones.filter((s) => {
+                        const nombre = (s.nombre ?? "").toLowerCase();
+                        const desc = (s.descripcion ?? "").toLowerCase();
+                        return nombre.includes(q) || desc.includes(q);
+                    });
+
+            renderList(filtered);
+        });
     }
 
     list.addEventListener("click", (e) => {
@@ -137,6 +165,7 @@ export function renderSesiones(
     const botonera = container.querySelector("#botonera");
     if (botonera) createBackButton(botonera, onBack);
 }
+
 
 export function renderCarrito(container, { onBack, items = [], total = 0, onRemoveOne, onClear }) {
     setView(
@@ -355,9 +384,6 @@ export function renderPreferencias(
             filterUnderBudget: filterCheckbox.checked,
         };
 
-        if (typeof onSubmitPrefs === "function") {
-            onSubmitPrefs(payload);
-        }
         if (typeof onSubmitPrefs === "function") {
             onSubmitPrefs(payload);
         }

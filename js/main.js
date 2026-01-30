@@ -21,13 +21,29 @@ import { loadPrefs, savePrefs } from "./prefs.js";
 
 const app = document.querySelector("#app");
 
+const userBadge = document.querySelector("#user-badge");
+
 let sesionesCache = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     showHome();
 });
 
+function updateUserBadge() {
+    if (!userBadge) return;
+
+    const prefs = loadPrefs();
+    const name = (prefs.name ?? "").trim();
+
+    if (name.length >= 3) {
+        userBadge.textContent = name;
+    } else {
+        userBadge.textContent = "";
+    }
+}
+
 function showHome() {
+    updateUserBadge();
     renderHome(app, {
         onSesiones: showSesiones,
         onCarrito: showCarrito,
