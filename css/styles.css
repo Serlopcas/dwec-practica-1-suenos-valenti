@@ -1,3 +1,19 @@
+/*
+ * Sueños Valenti – Estilos principales
+ * ------------------------------------
+ * Este archivo define los estilos base, componentes y utilidades
+ * para la aplicación de sesiones holísticas.
+ *
+ * Estructura:
+ * 1. Base
+ * 2. Layout principal y contenedores
+ * 3. Botones
+ * 4. Tarjetas de sesión
+ * 5. Formularios y campos
+ * 6. Notificaciones (toast)
+ * 7. Footer y sticky footer
+ * 8. Controles laterales
+ */
 body {
     background: #f5f3fa;
     min-height: 100vh;
@@ -9,6 +25,11 @@ body {
     align-items: center;
 }
 
+/*
+ * Layout principal y contenedores
+ * -------------------------------
+ * Sección principal de la app y centrado de contenido.
+ */
 .main-section {
     background: #fffefc;
     margin: 2rem 0;
@@ -28,6 +49,10 @@ header h2 {
     text-align: center;
 }
 
+/*
+ * Botones principales de la home
+ * ------------------------------
+ */
 #home-btns {
     display: flex;
     flex-direction: row;
@@ -49,6 +74,10 @@ button {
     transition: background 0.15s;
 }
 
+/*
+ * Botón destacado para "Añadir al carrito"
+ * ----------------------------------------
+ */
 button.btn-add {
     font-weight: 600;
     box-shadow: 0 4px 16px #7e57c244;
@@ -61,6 +90,11 @@ button.btn-add:focus {
     background: #5e35b1;
     color: #fffbe8;
 }
+
+/*
+ * Tarjeta de sesión: contenedor de cada sesión
+ * --------------------------------------------
+ */
 
 .sesion-card {
     background: #f3f0fa;
@@ -77,6 +111,20 @@ button.btn-add:focus {
     box-shadow: 0 8px 32px #a48ad4cc;
     border-color: #a48ad4;
 }
+
+.sesion-card:hover {
+    cursor: pointer;
+}
+
+.sesion-card button:hover {
+    cursor: pointer;
+}
+
+/*
+ * Formularios y campos de entrada
+ * ------------------------------
+ * Preferencias y validaciones.
+ */
 
 form {
     background: #f7f5fa;
@@ -111,6 +159,41 @@ select {
     font-weight: 500;
 }
 
+/*
+ * Notificaciones tipo toast
+ * ------------------------
+ * Mensajes de éxito/error flotantes.
+ */
+.toast {
+    position: fixed;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    padding: 12px 16px;
+    border-radius: 10px;
+    max-width: 90vw;
+    display: none;
+}
+
+.toast.is-visible {
+    display: block;
+}
+
+.toast[data-type="ok"] {
+    background: #e8f7ee;
+    border: 1px solid #7fd6a3;
+}
+
+.toast[data-type="error"] {
+    background: #fde9e9;
+    border: 1px solid #f2a2a2;
+}
+
+/*
+ * Espacio para sticky footer
+ * --------------------------
+ */
 #app.has-sticky-footer {
     padding-bottom: 72px;
 }
@@ -136,6 +219,10 @@ select {
     justify-content: center;
 }
 
+/*
+ * Controles laterales
+ * -------------------
+ */
 #scroll-controls {
     position: fixed;
     right: 16px;

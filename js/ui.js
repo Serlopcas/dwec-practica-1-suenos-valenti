@@ -80,7 +80,7 @@ export function renderSesiones(
     { onBack, sesiones = [], onAddToCart, cartCount = 0, getCartCount }
 ) {
     container.classList.add("has-sticky-footer");
-    
+
     setView(
         container,
         `
@@ -95,7 +95,7 @@ export function renderSesiones(
             <label for="sesiones-search"><strong>Buscar por título o descripción de la sesión</strong></label><br />
             <input id="sesiones-search" type="text" placeholder="Introduce texto para buscar"/>
 
-            <p id="sesiones-feedback" class="feedback" aria-live="polite"></p>
+            <div id="sesiones-toast" class="toast"></div>
 
             <div id="sesiones-list" class="sesiones-list"></div>
         </section>
@@ -106,11 +106,24 @@ export function renderSesiones(
     const list = container.querySelector("#sesiones-list");
     const feedback = container.querySelector("#sesiones-feedback");
     const countEl = container.querySelector("#sesiones-cart-count");
+    const toast = container.querySelector("#sesiones-toast");
+    let toastTimer = null;
 
-    function setFeedback(text, type = "ok") {
-        if (!feedback) return;
-        feedback.textContent = text;
-        feedback.dataset.type = type;
+    function showToast(text, type = "ok", ms = 2200) {
+        if (!toast) return;
+
+        toast.dataset.type = type;
+
+        toast.textContent = text;
+        toast.classList.add("is-visible");
+
+        if (toastTimer) clearTimeout(toastTimer);
+
+        toastTimer = setTimeout(() => {
+            toast.classList.remove("is-visible");
+            toast.textContent = "";
+            toastTimer = null;
+        }, ms);
     }
 
     function renderList(data) {
@@ -170,7 +183,7 @@ export function renderSesiones(
             }
 
             if (result.ok) {
-                setFeedback(`Sesión añadida al carrito correctamente.`, "ok");
+                showToast(`Sesión añadida al carrito correctamente.`, "ok");
 
                 if (countEl) {
                     if (typeof getCartCount === "function") {
@@ -181,7 +194,7 @@ export function renderSesiones(
                     }
                 }
             } else {
-                setFeedback(
+                showToast(
                     result.message || `No se ha podido añadir la sesión al carrito.`,
                     "error"
                 );
@@ -207,7 +220,7 @@ export function renderSesiones(
 
 export function renderCarrito(container, { onBack, items = [], total = 0, onRemoveOne, onClear }) {
     container.classList.add("has-sticky-footer");
-    
+
     setView(
         container,
         `
