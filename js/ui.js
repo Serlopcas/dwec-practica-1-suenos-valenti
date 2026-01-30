@@ -249,7 +249,7 @@ export function renderCarrito(container, { onBack, items = [], total = 0, onRemo
 
 export function renderPreferencias(
     container,
-    { onBack, prefs, onSubmitPrefs }
+    { onBack, prefs, onSubmitPrefs, onRestorePrefs }
 ) {
     setView(
         container,
@@ -293,7 +293,8 @@ export function renderPreferencias(
         </div>
 
         <button id="prefs-save" type="submit">Guardar preferencias</button>
-        <button id="prefs-reset" type="button">Restablecer</button>
+        <button id="prefs-clear" type="button">Limpiar</button>
+        <button id="prefs-restore" type="button">Restablecer</button>
         <span id="prefs-status" class="status-text"></span>
       </form>
 
@@ -302,7 +303,6 @@ export function renderPreferencias(
   `
     );
 
-    const resetBtn = container.querySelector("#prefs-reset");
     const form = container.querySelector("#prefs-form");
     const nameInput = container.querySelector("#pref-name");
     const budgetInput = container.querySelector("#pref-budget");
@@ -310,6 +310,8 @@ export function renderPreferencias(
     const sortDirSelect = container.querySelector("#pref-sortdir");
     const filterCheckbox = container.querySelector("#pref-filter");
     const saveBtn = container.querySelector("#prefs-save");
+    const clearBtn = container.querySelector("#prefs-clear");
+    const restoreBtn = container.querySelector("#prefs-restore");
     const status = container.querySelector("#prefs-status");
 
     const errName = container.querySelector("#err-name");
@@ -322,27 +324,12 @@ export function renderPreferencias(
     budgetInput.value = prefs.maxBudget ?? "";
     filterCheckbox.checked = Boolean(prefs.filterUnderBudget);
 
-    if (resetBtn) {
-        resetBtn.addEventListener("click", () => {
-            form.reset();
-            errName.textContent = "";
-            errBudget.textContent = "";
-            errFilter.textContent = "";
-            status.textContent = "Restablecido a valores por defecto";
-            validateLive();
-        });
-    }
-
     function parseBudget(value) {
         const trimmed = String(value ?? "").trim();
         if (trimmed === "") return null;
         const n = Number(trimmed);
         if (!Number.isFinite(n)) return NaN;
         return n;
-    }
-
-    function isValidPositiveInt(n) {
-        return Number.isInteger(n) && n > 0;
     }
 
     function validateLive() {
@@ -388,6 +375,27 @@ export function renderPreferencias(
         status.textContent = "";
     });
     filterCheckbox.addEventListener("change", validateLive);
+
+    if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+            form.reset();
+            errName.textContent = "";
+            errBudget.textContent = "";
+            errFilter.textContent = "";
+            status.textContent = "Formulario limpiado";
+            validateLive();
+        });
+    }
+
+    if (restoreBtn) {
+        restoreBtn.addEventListener("click", () => {
+            if (typeof onRestorePrefs === "function") {
+                onRestorePrefs();
+            } else {
+                status.textContent = "No se pudo restaurar (callback no disponible)";
+            }
+        });
+    }
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();

@@ -210,5 +210,8 @@ function showPreferencias() {
             savePrefs(newPrefs);
             showHome();
         },
+        onRestorePrefs: () => {
+            showPreferencias();
+        },
     });
 }
