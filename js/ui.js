@@ -1,8 +1,35 @@
+/**
+ * Módulo de interfaz (UI)
+ * ----------------------
+ * Responsabilidades:
+ * - Renderizar las distintas vistas (Home, Sesiones, Carrito, Preferencias) en un contenedor.
+ * - Montar listeners de eventos de cada vista y delegarlos a callbacks externos (main).
+ * - Mostrar feedback visual (toast, estados, errores de formulario).
+ *
+ * Convención:
+ * - Cada `renderX` reemplaza el HTML del contenedor y monta listeners sobre el DOM recién creado.
+ * - La navegación se delega mediante callbacks (onBack, onSesiones, etc.).
+ */
+
 import { validatePrefs } from "./prefs.js";
+
+/**
+ * Sustituye el contenido del contenedor por el HTML indicado.
+ *
+ * @param {HTMLElement} container
+ * @param {string} html
+ */
 export function setView(container, html) {
     container.innerHTML = html;
 }
 
+/**
+ * Crea un botón estándar y, si se proporciona, registra el handler de click.
+ *
+ * @param {string} text Texto visible del botón.
+ * @param {Function} [onClick] Callback opcional para el evento click.
+ * @returns {HTMLButtonElement}
+ */
 export function createButton(text, onClick) {
     const btn = document.createElement("button");
     btn.type = "button";
@@ -13,11 +40,24 @@ export function createButton(text, onClick) {
     return btn;
 }
 
+/**
+ * Inserta un botón "Volver" en el contenedor indicado.
+ *
+ * @param {HTMLElement} container
+ * @param {Function} onBack Callback de navegación hacia atrás.
+ */
 export function createBackButton(container, onBack) {
     const btn = createButton("Volver", onBack);
     container.appendChild(btn);
 }
 
+/**
+ * Monta un footer fijo (sticky) con acciones mínimas de navegación.
+ * Se utiliza como patrón consistente entre vistas.
+ *
+ * @param {HTMLElement} container
+ * @param {Function} onBack Callback de navegación.
+ */
 function mountStickyFooter(container, onBack) {
     const footer = document.createElement("footer");
     footer.className = "sticky-footer";
@@ -31,12 +71,24 @@ function mountStickyFooter(container, onBack) {
     container.appendChild(footer);
 }
 
+/**
+ * Renderiza la vista de inicio.
+ *
+ * @param {HTMLElement} container
+ * @param {{
+ *   onSesiones: Function,
+ *   onCarrito: Function,
+ *   onPreferencias: Function,
+ *   cartCount?: number
+ * }} params
+ */
 export function renderHome(
     container,
     { onSesiones, onCarrito, onPreferencias, cartCount = 0 }
 ) {
     container.classList.remove("has-sticky-footer");
 
+    // Badge condicional con el número de elementos del carrito.
     const badgeHtml =
         cartCount > 0
             ? `<span class="badge">${cartCount}</span>`
@@ -68,6 +120,7 @@ export function renderHome(
         `
     );
 
+    // Vínculos a navegación.
     container.querySelector("#btn-sesiones")?.addEventListener("click", onSesiones);
     container.querySelector("#btn-carrito")?.addEventListener("click", onCarrito);
     container
@@ -75,6 +128,21 @@ export function renderHome(
         ?.addEventListener("click", onPreferencias);
 }
 
+/**
+ * Renderiza la vista de sesiones y gestiona:
+ * - búsqueda por texto en cliente
+ * - toast de feedback
+ * - delegación de clicks (añadir al carrito / expandir tarjeta)
+ *
+ * @param {HTMLElement} container
+ * @param {{
+ *   onBack: Function,
+ *   sesiones?: Array<{id:number, nombre:string, descripcion?:string, precio:number}>,
+ *   onAddToCart: Function,
+ *   cartCount?: number,
+ *   getCartCount?: Function
+ * }} params
+ */
 export function renderSesiones(
     container,
     { onBack, sesiones = [], onAddToCart, cartCount = 0, getCartCount }
@@ -109,6 +177,13 @@ export function renderSesiones(
     const toast = container.querySelector("#sesiones-toast");
     let toastTimer = null;
 
+    /**
+     * Muestra un toast temporal con estilo por tipo.
+     *
+     * @param {string} text
+     * @param {"ok"|"error"} [type="ok"]
+     * @param {number} [ms=2200]
+     */
     function showToast(text, type = "ok", ms = 2200) {
         if (!toast) return;
 
@@ -126,6 +201,11 @@ export function renderSesiones(
         }, ms);
     }
 
+    /**
+     * Renderiza la lista de tarjetas de sesión.
+     *
+     * @param {Array<{id:number, nombre:string, descripcion?:string, precio:number}>} data
+     */
     function renderList(data) {
         if (!list) return;
 
@@ -156,6 +236,7 @@ export function renderSesiones(
 
     renderList(sesiones);
 
+    // Filtro local por nombre o descripción.
     if (searchInput) {
         searchInput.addEventListener("input", () => {
             const q = searchInput.value.trim().toLowerCase();
@@ -173,6 +254,9 @@ export function renderSesiones(
         });
     }
 
+    // Delegación de eventos:
+    // - botón "Añadir al carrito"
+    // - click sobre tarjeta para desplegar/plegar descripción
     list.addEventListener("click", (e) => {
         const btn = e.target.closest(".btn-add");
         if (btn) {
@@ -186,6 +270,7 @@ export function renderSesiones(
             if (result.ok) {
                 showToast(`Sesión añadida al carrito correctamente.`, "ok");
 
+                // Actualización del contador de carrito.
                 if (countEl) {
                     if (typeof getCartCount === "function") {
                         countEl.textContent = String(getCartCount());
@@ -224,7 +309,22 @@ export function renderSesiones(
     mountStickyFooter(container, onBack);
 }
 
-
+/**
+ * Renderiza la vista del carrito:
+ * - resumen (unidades y total)
+ * - listado de items
+ * - eliminación de una unidad por item
+ * - acción de vaciar carrito
+ *
+ * @param {HTMLElement} container
+ * @param {{
+ *   onBack: Function,
+ *   items?: Array<{id:number, nombre:string, precio:number, qty:number, subtotal:number}>,
+ *   total?: number,
+ *   onRemoveOne: Function,
+ *   onClear: Function
+ * }} params
+ */
 export function renderCarrito(container, { onBack, items = [], total = 0, onRemoveOne, onClear }) {
     container.classList.add("has-sticky-footer");
 
@@ -270,6 +370,7 @@ export function renderCarrito(container, { onBack, items = [], total = 0, onRemo
             )
             .join("");
 
+        // Delegación: eliminar una unidad del item seleccionado.
         list.addEventListener("click", (e) => {
             const btn = e.target.closest(".btn-remove");
             if (!btn) return;
@@ -278,6 +379,7 @@ export function renderCarrito(container, { onBack, items = [], total = 0, onRemo
         });
     }
 
+    // Acción de vaciado solo si hay contenido.
     if (items.length > 0) {
         const clearBtn = createButton("Vaciar carrito", onClear);
         actions.appendChild(clearBtn);
@@ -286,7 +388,27 @@ export function renderCarrito(container, { onBack, items = [], total = 0, onRemo
     mountStickyFooter(container, onBack);
 }
 
-
+/**
+ * Renderiza el formulario de preferencias y gestiona:
+ * - precarga de valores
+ * - validación en vivo
+ * - control de estados (deshabilitar checkbox/guardar)
+ * - envío (payload normalizado) y acciones auxiliares
+ *
+ * @param {HTMLElement} container
+ * @param {{
+ *   onBack: Function,
+ *   prefs: {
+ *     name?: string,
+ *     maxBudget?: number|null,
+ *     sortKey?: "id"|"nombre"|"precio",
+ *     sortDir?: "asc"|"desc",
+ *     filterUnderBudget?: boolean
+ *   },
+ *   onSubmitPrefs: Function,
+ *   onRestorePrefs: Function
+ * }} params
+ */
 export function renderPreferencias(
     container,
     { onBack, prefs, onSubmitPrefs, onRestorePrefs }
@@ -365,12 +487,22 @@ export function renderPreferencias(
     const errBudget = container.querySelector("#err-budget");
     const errFilter = container.querySelector("#err-filter");
 
+    // Precarga de valores.
     nameInput.value = prefs.name ?? "";
     sortKeySelect.value = prefs.sortKey ?? "id";
     sortDirSelect.value = prefs.sortDir ?? "asc";
     budgetInput.value = prefs.maxBudget ?? "";
     filterCheckbox.checked = Boolean(prefs.filterUnderBudget);
 
+    /**
+     * Convierte el valor del input de presupuesto a:
+     * - null si está vacío
+     * - NaN si no es numérico
+     * - number finito en caso válido
+     *
+     * @param {any} value
+     * @returns {number|null}
+     */
     function parseBudget(value) {
         const trimmed = String(value ?? "").trim();
         if (trimmed === "") return null;
@@ -379,6 +511,14 @@ export function renderPreferencias(
         return n;
     }
 
+    /**
+     * Valida el formulario y sincroniza:
+     * - errores por campo
+     * - habilitación de checkbox (depende de presupuesto válido)
+     * - habilitación del botón de guardar
+     *
+     * @returns {{name: string, maxBudget: number|null}}
+     */
     function validateLive() {
         errName.textContent = "";
         errBudget.textContent = "";
@@ -399,6 +539,7 @@ export function renderPreferencias(
         if (errors.maxBudget) errBudget.textContent = errors.maxBudget;
         if (errors.filterUnderBudget) errFilter.textContent = errors.filterUnderBudget;
 
+        // El filtro depende de un presupuesto entero positivo.
         const budgetOk = budgetRaw !== null && Number.isInteger(budgetRaw) && budgetRaw > 0;
         filterCheckbox.disabled = !budgetOk;
         if (!budgetOk) {
@@ -413,6 +554,7 @@ export function renderPreferencias(
 
     validateLive();
 
+    // Validación reactiva.
     nameInput.addEventListener("input", validateLive);
     budgetInput.addEventListener("input", validateLive);
     sortKeySelect.addEventListener("change", () => {
@@ -423,6 +565,7 @@ export function renderPreferencias(
     });
     filterCheckbox.addEventListener("change", validateLive);
 
+    // Limpia el formulario sin persistir, manteniendo feedback y revalidación.
     if (clearBtn) {
         clearBtn.addEventListener("click", () => {
             form.reset();
@@ -434,6 +577,7 @@ export function renderPreferencias(
         });
     }
 
+    // Restaura preferencias mediante callback externo (coordinador).
     if (restoreBtn) {
         restoreBtn.addEventListener("click", () => {
             if (typeof onRestorePrefs === "function") {
@@ -444,6 +588,7 @@ export function renderPreferencias(
         });
     }
 
+    // Envío del formulario: construye payload normalizado y delega guardado.
     form.addEventListener("submit", (e) => {
         e.preventDefault();
 

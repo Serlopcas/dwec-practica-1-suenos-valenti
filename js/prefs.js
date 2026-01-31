@@ -1,5 +1,29 @@
+/**
+ * Módulo de preferencias (persistencia + validación)
+ * -------------------------------------------------
+ * Gestiona la configuración del usuario mediante localStorage.
+ *
+ * Preferencias soportadas:
+ * - name: nombre visible en la interfaz (opcional).
+ * - maxBudget: presupuesto máximo (entero positivo) o null si no se usa.
+ * - sortKey: clave de ordenación de sesiones ("id" | "nombre" | "precio").
+ * - sortDir: dirección de ordenación ("asc" | "desc").
+ * - filterUnderBudget: si está activo, filtra sesiones cuyo precio <= maxBudget.
+ */
+
 const PREFS_KEY = "sv_prefs_v1";
 
+/**
+ * Devuelve el objeto de preferencias por defecto.
+ *
+ * @returns {{
+ *   name: string,
+ *   maxBudget: number|null,
+ *   sortKey: "id"|"nombre"|"precio",
+ *   sortDir: "asc"|"desc",
+ *   filterUnderBudget: boolean
+ * }}
+ */
 export function getDefaultPrefs() {
     return {
         name: "",
@@ -10,6 +34,22 @@ export function getDefaultPrefs() {
     };
 }
 
+/**
+ * Carga las preferencias desde localStorage y aplica defaults/normalización.
+ * Si no existen o están corruptas, devuelve defaults.
+ *
+ * Normalización aplicada:
+ * - maxBudget se acepta solo si es número finito; si no, se restaura a default (null).
+ * - filterUnderBudget se fuerza a boolean.
+ *
+ * @returns {{
+ *   name: string,
+ *   maxBudget: number|null,
+ *   sortKey: "id"|"nombre"|"precio",
+ *   sortDir: "asc"|"desc",
+ *   filterUnderBudget: boolean
+ * }}
+ */
 export function loadPrefs() {
     try {
         const raw = localStorage.getItem(PREFS_KEY);
@@ -32,10 +72,36 @@ export function loadPrefs() {
     }
 }
 
+/**
+ * Guarda las preferencias en localStorage.
+ *
+ * @param {{
+ *   name: string,
+ *   maxBudget: number|null,
+ *   sortKey: "id"|"nombre"|"precio",
+ *   sortDir: "asc"|"desc",
+ *   filterUnderBudget: boolean
+ * }} prefs
+ */
 export function savePrefs(prefs) {
     localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
 }
 
+/**
+ * Valida un subconjunto de preferencias procedentes de un formulario.
+ *
+ * Reglas:
+ * - name: opcional; si existe, 3..16 caracteres.
+ * - maxBudget: si no es null, debe ser entero positivo.
+ * - filterUnderBudget: si es true, exige maxBudget válido.
+ *
+ * @param {{name: any, maxBudget: any, filterUnderBudget: any}} param0
+ * @returns {{
+ *   name?: string,
+ *   maxBudget?: string,
+ *   filterUnderBudget?: string
+ * }} Mapa de errores por campo (vacío si no hay errores).
+ */
 export function validatePrefs({ name, maxBudget, filterUnderBudget }) {
     const errors = {};
 
