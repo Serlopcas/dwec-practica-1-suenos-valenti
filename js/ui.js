@@ -140,6 +140,7 @@ export function renderSesiones(
                     `
                     <article class="sesion-card" data-id="${s.id}">
                     <h3>${s.nombre}</h3>
+                    <span class="sesion-more">Ver más…</span>
                     <p class="sesion-desc" hidden>
                         ${s.descripcion ? s.descripcion : ""}
                     </p>
@@ -211,6 +212,12 @@ export function renderSesiones(
         const desc = card.querySelector(".sesion-desc");
         if (desc) {
             desc.hidden = !card.classList.contains("highlighted");
+        }
+        const more = card.querySelector(".sesion-more");
+        if (more) {
+            more.textContent = card.classList.contains("highlighted")
+                ? "Ver menos…"
+                : "Ver más…";
         }
     });
 
