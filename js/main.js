@@ -37,12 +37,11 @@ function updateUserBadge() {
 
     const prefs = loadPrefs();
     const name = (prefs.name ?? "").trim();
+    const label = name
+        ? `🧘 Credencial cósmica: ${name}`
+        : `🧘 Credencial cósmica: Pendiente de encarnar`;
 
-    if (name.length >= 3) {
-        userBadge.textContent = name;
-    } else {
-        userBadge.textContent = "";
-    }
+    userBadge.textContent = label;
 }
 
 function showHome() {
