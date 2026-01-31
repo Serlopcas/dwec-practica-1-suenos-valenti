@@ -3,7 +3,7 @@
  * Autor: Sergio López Casado · Prometeo FP · DAW 2024–2026
  * GitHub: https://github.com/Serlopcas · LinkedIn: https://www.linkedin.com/in/sergiolopezcasado/
  */
- /*
+/*
  * Sueños Valenti – Estilos principales
  * ------------------------------------
  * Este archivo define los estilos base, componentes y utilidades
@@ -18,6 +18,7 @@
  * 6. Notificaciones (toast)
  * 7. Footer y sticky footer
  * 8. Controles laterales
+ * 9. Ajustes responsive (móvil)
  */
 body {
     background: #f5f3fa;
@@ -35,19 +36,6 @@ body {
  * -------------------------------
  * Sección principal de la app y centrado de contenido.
  */
-.main-section {
-    background: #fffefc;
-    margin: 2rem 0;
-    padding: 0.5rem 2.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 24px #bfaee055;
-    max-width: 440px;
-    width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
 header h1,
 header h2 {
@@ -73,6 +61,25 @@ header h2 {
     text-overflow: ellipsis;
 }
 
+.main-section {
+    background: #fffefc;
+    margin: 2rem auto;
+    padding: 0.5rem 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 24px #bfaee055;
+    max-width: 440px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: calc(100vw - 20px);
+}
+
+.main-section > p {
+    text-align: justify;
+}
+
 /*
  * Botones principales de la home
  * ------------------------------
@@ -95,7 +102,6 @@ button {
     margin: 0.3em 0.5em;
     font-size: 1em;
     cursor: pointer;
-    transition: background 0.15s;
 }
 
 /*
@@ -107,12 +113,11 @@ button.btn-add {
     box-shadow: 0 4px 16px #7e57c244;
 }
 
-button:hover,
+button:hover,   
 button:focus,
 button.btn-add:hover,
 button.btn-add:focus {
     background: #5e35b1;
-    color: #fffbe8;
 }
 
 /*
@@ -127,7 +132,6 @@ button.btn-add:focus {
     box-shadow: 0 4px 24px #bfaee088;
     margin: 1em 0;
     padding: 1em;
-    transition: background 0.2s, box-shadow 0.2s;
 }
 
 .sesion-card.highlighted {
@@ -164,18 +168,14 @@ select {
     border-radius: 0.5em;
     padding: 0.5em 0.7em;
     font-size: 1em;
-    background: #fffefc;
-    box-sizing: border-box;
 }
 
 .input-help {
     color: #7e57c2;
-    font-size: 0.93em;
 }
 
 .field-error {
     color: #b02a2a;
-    font-size: 0.97em;
     font-weight: 500;
 }
 
@@ -223,20 +223,12 @@ select {
     left: 0;
     right: 0;
     bottom: 0;
-    width: 100%;
     z-index: 999;
     display: flex;
     justify-content: center;
     padding: 12px 0;
     background: #f5f3fa;
     box-shadow: 0 -2px 8px #0001;
-}
-
-.sticky-footer__inner {
-    width: 100%;
-    max-width: 440px;
-    display: flex;
-    justify-content: center;
 }
 
 /*
@@ -252,4 +244,39 @@ select {
     flex-direction: column;
     gap: 10px;
     z-index: 1000;
+}
+
+#scroll-controls button {
+    margin: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+}
+
+/* 
+ * Ajustes responsive (móvil)
+ * --------------------------
+ */
+@media (max-width: 768px) {
+    header {
+        max-width: 440px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    header>h2 {
+        margin: 0 1rem;
+    }
+
+    #user-badge {
+        position: static;
+        margin: 0.75rem auto 0;
+    }
+}
+
+@media (max-width: 450px) {
+    #home-btns {
+        flex-wrap: wrap;
+        gap: 0.6em;
+    }
 }
