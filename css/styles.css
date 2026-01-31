@@ -73,10 +73,9 @@ header h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: calc(100vw - 20px);
 }
 
-.main-section > p {
+.main-section>p {
     text-align: justify;
 }
 
@@ -113,7 +112,7 @@ button.btn-add {
     box-shadow: 0 4px 16px #7e57c244;
 }
 
-button:hover,   
+button:hover,
 button:focus,
 button.btn-add:hover,
 button.btn-add:focus {
@@ -274,9 +273,13 @@ select {
     }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 460px) {
     #home-btns {
         flex-wrap: wrap;
         gap: 0.6em;
+    }
+
+    .main-section {
+        max-width: calc(100vw - 20px);
     }
 }
