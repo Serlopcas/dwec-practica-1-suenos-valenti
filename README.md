@@ -76,10 +76,12 @@ Para que `fetch("./data/sesiones.json")` funcione correctamente, hay que servir 
 ## Acciones e interacciones disponibles
 
 ### Navegación
+
 - Desde **Home** puedes ir a **Sesiones**, **Carrito** o **Preferencias** sin recargar la página.
 - En todas las vistas tienes un botón de **Volver** (sticky footer) para mantener una navegación consistente.
 
 ### Sesiones
+
 - **Buscar sesiones**: escribe en el campo de búsqueda y se filtran al instante por **título o descripción**.
 - **Ampliar una sesión**: puedes **clicar en una tarjeta** para desplegar la descripción (ver más / ver menos).
 - **Añadir al carrito**: pulsa **“Añadir al carrito”** en una sesión:
@@ -87,12 +89,14 @@ Para que `fetch("./data/sesiones.json")` funcione correctamente, hay que servir 
   - Se actualiza el **contador del carrito** en la propia vista de sesiones.
 
 ### Carrito
+
 - **Ver resumen del carrito**: se muestra el número de elementos y el **total**.
 - **Eliminar una unidad**: en cada sesión del carrito puedes pulsar **“Eliminar 1”** para restar una unidad.
 - **Vaciar carrito**: botón para eliminar todos los elementos de una sola vez.
 - **Persistencia**: el carrito se conserva aunque recargues la página (usa `localStorage`).
 
 ### Preferencias
+
 - **Nombre “espiritual”**: si lo cambias y guardas, se actualiza el **badge** visible en la interfaz.
 - **Ordenación**:
   - Elegir por qué ordenar (`id`, `nombre`, `precio`).
@@ -110,6 +114,26 @@ Para que `fetch("./data/sesiones.json")` funcione correctamente, hay que servir 
   - “Restablecer” vuelve a las preferencias por defecto.
 
 ### Extras de experiencia de uso
+
 - **Botones flotantes de scroll** (▲/▼) para subir o bajar rápidamente en la página.
 
 ---
+
+## Estado del proyecto
+
+Proyecto académico finalizado para entrega. Se aceptan mejoras y refactorizaciones como evolución personal.
+
+---
+
+## Autoría
+
+- **Autor:** Sergio López Casado
+- **Curso:** Técnico Superior en Desarrollo de Aplicaciones Web (2024–2026)
+- **Asignatura:** DWEC (Desarrollo Web en Entorno Cliente)
+- **Centro:** Prometeo FP
+- **Propósito:** Práctica evaluable
+
+## Perfil
+
+- **GitHub:** https://github.com/Serlopcas
+- **LinkedIn:** https://www.linkedin.com/in/sergiolopezcasado/

@@ -1,4 +1,9 @@
 /**
+ * Sueños Valenti – Práctica evaluable (DWEC)
+ * Autor: Sergio López Casado · Prometeo FP · DAW 2024–2026
+ * GitHub: https://github.com/Serlopcas · LinkedIn: https://www.linkedin.com/in/sergiolopezcasado/
+ */
+/**
  * Módulo de preferencias (persistencia + validación)
  * -------------------------------------------------
  * Gestiona la configuración del usuario mediante localStorage.
