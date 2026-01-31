@@ -5,7 +5,7 @@ Proyecto desarrollado como práctica de **DWEC** con enfoque en **DOM**, **event
 
 ---
 
-## Qué ofrece (y por qué mola)
+## Qué ofrece
 
 - **SPA real sin recargas**: las vistas se renderizan dinámicamente en el contenedor principal usando JavaScript (Home / Sesiones / Carrito / Preferencias).
 - **Catálogo cargado con `fetch` + JSON**: sesiones servidas desde un archivo local `data/sesiones.json`.
